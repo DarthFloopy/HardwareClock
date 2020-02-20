@@ -1,0 +1,14 @@
+
+.classpath
+.DS_Store
+.project
+.settings/org.eclipse.jdt.core.prefs
+bin/com/josephcagle/hardwareclock/ClockPanel$1.class
+bin/com/josephcagle/hardwareclock/ClockPanel$2.class
+bin/com/josephcagle/hardwareclock/ClockPanel$3.class
+bin/com/josephcagle/hardwareclock/ClockPanel$4.class
+bin/com/josephcagle/hardwareclock/ClockPanel$5.class
+bin/com/josephcagle/hardwareclock/ClockPanel.class
+src/.DS_Store
+src/com/.DS_Store
+src/com/josephcagle/.DS_Store
