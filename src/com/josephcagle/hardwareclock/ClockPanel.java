@@ -12,11 +12,13 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Toolkit;
 import java.time.Duration;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -63,7 +65,15 @@ public class ClockPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public ClockPanel(int timeControlInSeconds) {
-		setPreferredSize(new Dimension(1500, 600));
+
+
+		// get screen size in pixels
+		Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
+		int screenWidth = screenDimension.width;
+		int screenHeight = screenDimension.height;
+
+		// setPreferredSize(new Dimension(1500, 600));
+		setPreferredSize(new Dimension(screenWidth, (int)(screenHeight*0.9 + 0.5)));
 		setLayout(new BorderLayout(0, 0));
 		
 		leftClock = new JPanel();
@@ -75,9 +85,12 @@ public class ClockPanel extends JPanel {
 		leftClock.add(horizontalBox, BorderLayout.CENTER);
 		
 		Component horizontalStrut1 = Box.createHorizontalStrut(20);
-		horizontalStrut1.setPreferredSize(new Dimension(200, 0));
-		horizontalStrut1.setMinimumSize(new Dimension(200, 0));
-		horizontalStrut1.setMaximumSize(new Dimension(200, 32767));
+		int widthofStrut = (int)(0.1302*screenWidth + 0.5);
+		// System.out.print(widthofStrut);
+		// horizontalStrut1.setPreferredSize(new Dimension(200, 0));
+		horizontalStrut1.setPreferredSize(new Dimension(widthofStrut, 0));
+		horizontalStrut1.setMinimumSize(new Dimension(widthofStrut, 0));
+		horizontalStrut1.setMaximumSize(new Dimension(widthofStrut, 32767));
 		horizontalBox.add(horizontalStrut1);
 		
 		leftTimeLabel = new JLabel("");
@@ -85,9 +98,9 @@ public class ClockPanel extends JPanel {
 		horizontalBox.add(leftTimeLabel);
 		
 		Component horizontalStrut2 = Box.createHorizontalStrut(20);
-		horizontalStrut2.setPreferredSize(new Dimension(200, 0));
-		horizontalStrut2.setMinimumSize(new Dimension(200, 0));
-		horizontalStrut2.setMaximumSize(new Dimension(200, 32767));
+		horizontalStrut2.setPreferredSize(new Dimension(widthofStrut, 0));
+		horizontalStrut2.setMinimumSize(new Dimension(widthofStrut, 0));
+		horizontalStrut2.setMaximumSize(new Dimension(widthofStrut, 32767));
 		horizontalBox.add(horizontalStrut2);
 		
 		rightClock = new JPanel();
@@ -99,9 +112,9 @@ public class ClockPanel extends JPanel {
 		rightClock.add(horizontalBox_1, BorderLayout.CENTER);
 		
 		Component horizontalStrut_3 = Box.createHorizontalStrut(20);
-		horizontalStrut_3.setPreferredSize(new Dimension(200, 0));
-		horizontalStrut_3.setMinimumSize(new Dimension(200, 0));
-		horizontalStrut_3.setMaximumSize(new Dimension(200, 32767));
+		horizontalStrut_3.setPreferredSize(new Dimension(widthofStrut, 0));
+		horizontalStrut_3.setMinimumSize(new Dimension(widthofStrut, 0));
+		horizontalStrut_3.setMaximumSize(new Dimension(widthofStrut, 32767));
 		horizontalBox_1.add(horizontalStrut_3);
 		
 		rightTimeLabel = new JLabel("");
@@ -109,9 +122,9 @@ public class ClockPanel extends JPanel {
 		horizontalBox_1.add(rightTimeLabel);
 		
 		Component horizontalStrut4 = Box.createHorizontalStrut(20);
-		horizontalStrut4.setPreferredSize(new Dimension(200, 0));
-		horizontalStrut4.setMaximumSize(new Dimension(200, 32767));
-		horizontalStrut4.setMinimumSize(new Dimension(200, 0));
+		horizontalStrut4.setPreferredSize(new Dimension(widthofStrut, 0));
+		horizontalStrut4.setMaximumSize(new Dimension(widthofStrut, 32767));
+		horizontalStrut4.setMinimumSize(new Dimension(widthofStrut, 0));
 		horizontalBox_1.add(horizontalStrut4);
 		
 		controlPanel = new JPanel();
@@ -121,8 +134,11 @@ public class ClockPanel extends JPanel {
 		JPanel panel = new JPanel();
 		controlPanel.add(panel, BorderLayout.CENTER);
 		panel.setLayout(new BorderLayout(0, 0));
+		panel.setPreferredSize(new Dimension((int)((0.1235 - 2*0.0163)*screenWidth + 0.5), (int)((4*0.1235 - 2*0.0787)*screenHeight + 0.5)));
 		
 		JButton btnReset = new JButton("Reset");
+		btnReset.setBorder(BorderFactory.createSoftBevelBorder(0));
+		
 		panel.add(btnReset, BorderLayout.CENTER);
 		btnReset.addActionListener(new ActionListener() {
 			@Override
@@ -140,16 +156,18 @@ public class ClockPanel extends JPanel {
 		lblPressPTo.setHorizontalAlignment(SwingConstants.CENTER);
 		panel.add(lblPressPTo, BorderLayout.NORTH);
 		
-		Component rigidArea = Box.createRigidArea(new Dimension(25, 68));
+		// Component rigidArea = Box.createRigidArea(new Dimension(25, 68));
+		Component rigidArea = Box.createRigidArea(new Dimension((int)(0.0163*screenWidth + 0.5), (int)(0.0787*screenHeight + 0.5)));
 		panel.add(rigidArea, BorderLayout.WEST);
 		
-		Component rigidArea_1 = Box.createRigidArea(new Dimension(25, 68));
+		Component rigidArea_1 = Box.createRigidArea(new Dimension((int)(0.0163*screenWidth + 0.5), (int)(0.0787*screenHeight + 0.5)));
 		panel.add(rigidArea_1, BorderLayout.EAST);
 		
-		Component rigidArea_2 = Box.createRigidArea(new Dimension(478, 350));
+		// Component rigidArea_2 = Box.createRigidArea(new Dimension(478, 350));
+		Component rigidArea_2 = Box.createRigidArea(new Dimension((int)(0.3112*screenWidth + 0.5), (int)(0.4051*screenHeight + 0.5)));
 		controlPanel.add(rigidArea_2, BorderLayout.NORTH);
 		
-		Component rigidArea_3 = Box.createRigidArea(new Dimension(478, 350));
+		Component rigidArea_3 = Box.createRigidArea(new Dimension((int)(0.3112*screenWidth + 0.5), (int)(0.4051*screenHeight + 0.5)));
 		controlPanel.add(rigidArea_3, BorderLayout.SOUTH);
 		
 		
