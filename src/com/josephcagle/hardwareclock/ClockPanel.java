@@ -1,10 +1,12 @@
 package com.josephcagle.hardwareclock;
 
+import java.awt.GridLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -12,6 +14,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Toolkit;
 import java.time.Duration;
 import java.util.Scanner;
 import java.util.Timer;
@@ -32,6 +35,7 @@ public class ClockPanel extends JPanel {
 	private Color ORANGE = Color.ORANGE;
 	private Color RED = new Color(0xff6d4d);
 	
+	private static Dimension screenDimension;
 	private JPanel leftClock;
 	private JLabel leftTimeLabel;
 	private JPanel rightClock;
@@ -41,16 +45,18 @@ public class ClockPanel extends JPanel {
 	private Duration rightTime;
 	private Color leftColor = DARK_GRAY;
 	private Color rightColor = DARK_GRAY;
+	private static int timeControlInSeconds;
 
 
 	public static void main(String[] args) {
-		int timeControlInSeconds = 300;
+		timeControlInSeconds = 300;
 		if (args.length > 0) {
 			try (Scanner scanner = new Scanner(args[0])) {
 				if (scanner.hasNextInt())
 					timeControlInSeconds = scanner.nextInt();
 			}
 		}
+
 		JFrame frame = new JFrame();
 		frame.getContentPane().add(new ClockPanel(timeControlInSeconds));
 		frame.pack();
@@ -63,67 +69,43 @@ public class ClockPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public ClockPanel(int timeControlInSeconds) {
-		setPreferredSize(new Dimension(1500, 600));
-		setLayout(new BorderLayout(0, 0));
+
+		// get screen size in pixels
+		screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
+		int screenWidth = (int)(screenDimension.width*0.6 + 0.5);
+		int screenHeight = (int)(screenDimension.height*0.6 + 0.5);
+
+		// setPreferredSize(new Dimension(1500, 600));
+		setPreferredSize(new Dimension(screenWidth, screenHeight));
+		setLayout(new GridLayout(3, 1));
 		
 		leftClock = new JPanel();
 		leftClock.setBackground(leftColor);
-		add(leftClock, BorderLayout.WEST);
 		leftClock.setLayout(new BorderLayout(0, 0));
 		
-		Box horizontalBox = Box.createHorizontalBox();
-		leftClock.add(horizontalBox, BorderLayout.CENTER);
-		
-		Component horizontalStrut1 = Box.createHorizontalStrut(20);
-		horizontalStrut1.setPreferredSize(new Dimension(200, 0));
-		horizontalStrut1.setMinimumSize(new Dimension(200, 0));
-		horizontalStrut1.setMaximumSize(new Dimension(200, 32767));
-		horizontalBox.add(horizontalStrut1);
-		
 		leftTimeLabel = new JLabel("");
-		leftTimeLabel.setFont(new Font("Ubuntu", Font.BOLD, 60));
-		horizontalBox.add(leftTimeLabel);
-		
-		Component horizontalStrut2 = Box.createHorizontalStrut(20);
-		horizontalStrut2.setPreferredSize(new Dimension(200, 0));
-		horizontalStrut2.setMinimumSize(new Dimension(200, 0));
-		horizontalStrut2.setMaximumSize(new Dimension(200, 32767));
-		horizontalBox.add(horizontalStrut2);
+		int fontSize = (int)(screenHeight*0.115 + 0.5); 
+		// leftTimeLabel.setFont(new Font("Ubuntu", Font.BOLD, 60));
+		leftTimeLabel.setFont(new Font("Ubuntu", Font.BOLD, fontSize));
+		leftTimeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		leftClock.add(leftTimeLabel, BorderLayout.CENTER);
 		
 		rightClock = new JPanel();
 		rightClock.setBackground(rightColor);
-		add(rightClock, BorderLayout.EAST);
 		rightClock.setLayout(new BorderLayout(0, 0));
 		
-		Box horizontalBox_1 = Box.createHorizontalBox();
-		rightClock.add(horizontalBox_1, BorderLayout.CENTER);
-		
-		Component horizontalStrut_3 = Box.createHorizontalStrut(20);
-		horizontalStrut_3.setPreferredSize(new Dimension(200, 0));
-		horizontalStrut_3.setMinimumSize(new Dimension(200, 0));
-		horizontalStrut_3.setMaximumSize(new Dimension(200, 32767));
-		horizontalBox_1.add(horizontalStrut_3);
-		
 		rightTimeLabel = new JLabel("");
-		rightTimeLabel.setFont(new Font("Ubuntu", Font.BOLD, 60));
-		horizontalBox_1.add(rightTimeLabel);
+		rightTimeLabel.setFont(new Font("Ubuntu", Font.BOLD, fontSize));
+		rightTimeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		rightClock.add(rightTimeLabel, BorderLayout.CENTER);
 		
-		Component horizontalStrut4 = Box.createHorizontalStrut(20);
-		horizontalStrut4.setPreferredSize(new Dimension(200, 0));
-		horizontalStrut4.setMaximumSize(new Dimension(200, 32767));
-		horizontalStrut4.setMinimumSize(new Dimension(200, 0));
-		horizontalBox_1.add(horizontalStrut4);
 		
 		controlPanel = new JPanel();
-		add(controlPanel, BorderLayout.CENTER);
 		controlPanel.setLayout(new BorderLayout(0, 0));
+				
+		JButton btnReset = new JButton("Reset (or Press R)");
 		
-		JPanel panel = new JPanel();
-		controlPanel.add(panel, BorderLayout.CENTER);
-		panel.setLayout(new BorderLayout(0, 0));
-		
-		JButton btnReset = new JButton("Reset");
-		panel.add(btnReset, BorderLayout.CENTER);
+		controlPanel.add(btnReset, BorderLayout.CENTER);
 		btnReset.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -134,23 +116,15 @@ public class ClockPanel extends JPanel {
 		
 		JLabel lblPressQTo = new JLabel("Press Q to quit");
 		lblPressQTo.setHorizontalAlignment(SwingConstants.CENTER);
-		panel.add(lblPressQTo, BorderLayout.SOUTH);
+		controlPanel.add(lblPressQTo, BorderLayout.SOUTH);
 		
 		JLabel lblPressPTo = new JLabel("Press P to pause");
 		lblPressPTo.setHorizontalAlignment(SwingConstants.CENTER);
-		panel.add(lblPressPTo, BorderLayout.NORTH);
-		
-		Component rigidArea = Box.createRigidArea(new Dimension(25, 68));
-		panel.add(rigidArea, BorderLayout.WEST);
-		
-		Component rigidArea_1 = Box.createRigidArea(new Dimension(25, 68));
-		panel.add(rigidArea_1, BorderLayout.EAST);
-		
-		Component rigidArea_2 = Box.createRigidArea(new Dimension(478, 350));
-		controlPanel.add(rigidArea_2, BorderLayout.NORTH);
-		
-		Component rigidArea_3 = Box.createRigidArea(new Dimension(478, 350));
-		controlPanel.add(rigidArea_3, BorderLayout.SOUTH);
+		controlPanel.add(lblPressPTo, BorderLayout.NORTH);
+
+		add(leftClock);
+		add(controlPanel);
+		add(rightClock);
 		
 		
 		leftTime = Duration.ofSeconds(timeControlInSeconds);
