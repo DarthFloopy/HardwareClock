@@ -12,3 +12,6 @@ bin/com/josephcagle/hardwareclock/ClockPanel.class
 src/.DS_Store
 src/com/.DS_Store
 src/com/josephcagle/.DS_Store
+
+.vscode
+.jar
